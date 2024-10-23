@@ -1,0 +1,52 @@
+name: Update Package Versions
+
+on: 
+  schedule:
+    - cron: '0 0 * * *'  # Run daily at midnight UTC
+  workflow_dispatch:
+    inputs:
+      packages:
+        description: 'Packages to update (space-separated, empty for all)'
+        required: false
+        default: ''
+      dryrun:
+        description: 'Dry run (only check for updates)'
+        type: boolean
+        required: false
+        default: false
+
+jobs:
+  update-packages: 
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for better commit messages
+
+      - name: Run updates
+        run: |
+          if [ -z "${{ github.event.inputs.packages }}" ]; then
+            echo "Updating all packages..."
+            bash getRelease.sh
+          else
+            echo "Updating specific packages: ${{ github.event.inputs.packages }}"
+            bash getRelease.sh ${{ github.event.inputs.packages }}
+          fi
+        env:
+          DRY_RUN: ${{ github.event.inputs.dryrun }}
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v43
+
+      - name: Commit changes
+        if: steps.changed-files.outputs.any_changed == 'true' && !github.event.inputs.dryrun
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: |
+            chore: update package versions
+
+            Updated packages:
+            ${{ steps.changed-files.outputs.all_changed_files }}
+          file_pattern: 'Formula/*.rb'
+          commit_author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
