@@ -23,4 +23,47 @@ update_superhtml(){
     rm -f superhtml_macos_*.tar.gz
 }
 
-update_superhtml
+update_gitpod_cli(){
+    # Get the manifest data
+    manifest=$(curl -s https://releases.gitpod.io/cli/stable/manifest.json)
+    
+    # Extract the latest version
+    last_version=$(echo "$manifest" | jq -r '.version')
+    
+    # Extract SHA256 hashes for each platform
+    darwin_arm64_sha256=$(echo "$manifest" | jq -r '.downloads."darwin-arm64".digest' | sed 's/sha256://')
+    darwin_amd64_sha256=$(echo "$manifest" | jq -r '.downloads."darwin-amd64".digest' | sed 's/sha256://')
+    linux_arm64_sha256=$(echo "$manifest" | jq -r '.downloads."linux-arm64".digest' | sed 's/sha256://')
+    linux_amd64_sha256=$(echo "$manifest" | jq -r '.downloads."linux-amd64".digest' | sed 's/sha256://')
+    
+    # Update the version number in the formula
+    sed -i "s/version \".*/version \"${last_version}\"/g" Formula/gitpod-cli.rb
+    
+    # Update the SHA256 hashes in the formula
+    sed -i "s/sha256 \"[a-f0-9]*\" # darwin-arm64/sha256 \"${darwin_arm64_sha256}\" # darwin-arm64/" Formula/gitpod-cli.rb
+    sed -i "s/sha256 \"[a-f0-9]*\" # darwin-amd64/sha256 \"${darwin_amd64_sha256}\" # darwin-amd64/" Formula/gitpod-cli.rb
+    sed -i "s/sha256 \"[a-f0-9]*\" # linux-arm64/sha256 \"${linux_arm64_sha256}\" # linux-arm64/" Formula/gitpod-cli.rb
+    sed -i "s/sha256 \"[a-f0-9]*\" # linux-amd64/sha256 \"${linux_amd64_sha256}\" # linux-amd64/" Formula/gitpod-cli.rb
+}
+
+# Check command line arguments
+if [ $# -eq 0 ]; then
+    # No arguments, update all packages
+    update_superhtml
+    update_gitpod_cli
+else
+    # Update specific packages
+    for package in "$@"; do
+        case $package in
+            "superhtml")
+                update_superhtml
+                ;;
+            "gitpod-cli")
+                update_gitpod_cli
+                ;;
+            *)
+                echo "Unknown package: $package"
+                ;;
+        esac
+    done
+fi
