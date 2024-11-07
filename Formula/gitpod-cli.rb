@@ -1,7 +1,7 @@
 class GitpodCli < Formula
   desc "Command-line interface for Gitpod"
   homepage "https://www.gitpod.io"
-  version "20241025.688"  # This line will be updated by the script
+  version "20241025.688"
   
   if OS.mac?
     if Hardware::CPU.arm?
