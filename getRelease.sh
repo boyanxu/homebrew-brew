@@ -93,13 +93,13 @@ update_jira_cli(){
         echo "jira-cli is already at latest version ${current_version}"
         echo "::endgroup::"
         return 0
-    }
+    fi
 
     if [ "${DRY_RUN:-false}" = "true" ]; then
         echo "Dry run - would update jira-cli to version ${last_version}"
         echo "::endgroup::"
         return 0
-    }
+    fi
 
     # Get SHA256 hashes from the release assets
     darwin_arm64_sha256=$(curl -sL "https://github.com/ankitpokhrel/jira-cli/releases/download/v${last_version}/jira_${last_version}_macOS_arm64.tar.gz.sha256sum" | awk '{print $1}')
@@ -128,13 +128,13 @@ update_gitpod_cli(){
         echo "gitpod-cli is already at latest version ${current_version}"
         echo "::endgroup::"
         return 0
-    }
+    fi
 
     if [ "${DRY_RUN:-false}" = "true" ]; then
         echo "Dry run - would update gitpod-cli to version ${last_version}"
         echo "::endgroup::"
         return 0
-    }
+    fi
     
     # Extract SHA256 hashes for each platform
     darwin_arm64_sha256=$(echo "$manifest" | jq -r '.downloads."darwin-arm64".digest' | sed 's/sha256://')
