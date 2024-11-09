@@ -18,6 +18,9 @@ on:
 jobs:
   update-packages: 
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,11 +36,22 @@ jobs:
             bash getRelease.sh ${{ github.event.inputs.packages }}
           fi
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DRY_RUN: ${{ github.event.inputs.dryrun }}
 
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v43
+
+      - name: Create summary
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          echo "# Package Updates Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Updated packages:" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.changed-files.outputs.all_changed_files }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
 
       - name: Commit changes
         if: steps.changed-files.outputs.any_changed == 'true' && !github.event.inputs.dryrun
