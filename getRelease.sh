@@ -23,6 +23,23 @@ update_superhtml(){
     rm -f superhtml_macos_*.tar.gz
 }
 
+update_jira_cli(){
+    # Get latest release info from GitHub API
+    latest_release=$(curl -s https://api.github.com/repos/ankitpokhrel/jira-cli/releases/latest)
+
+    # Extract version without 'v' prefix
+    last_version=$(echo "$latest_release" | jq -r '.tag_name' | sed 's/^v//')
+
+    # Get SHA256 hashes from the release assets
+    darwin_arm64_sha256=$(curl -sL https://github.com/ankitpokhrel/jira-cli/releases/download/v${last_version}/jira_${last_version}_macOS_arm64.tar.gz.sha256sum | awk '{print $1}')
+    darwin_amd64_sha256=$(curl -sL https://github.com/ankitpokhrel/jira-cli/releases/download/v${last_version}/jira_${last_version}_macOS_x86_64.tar.gz.sha256sum | awk '{print $1}')
+
+    # Update version and SHA256 in the formula
+    sed -i "s/version \".*/version \"${last_version}\"/g" Formula/jira-cli.rb
+    sed -i "s/sha256 \"[a-f0-9]*\".*macOS_arm64/sha256 \"${darwin_arm64_sha256}\"  # macOS_arm64/" Formula/jira-cli.rb
+    sed -i "s/sha256 \"[a-f0-9]*\".*macOS_x86_64/sha256 \"${darwin_amd64_sha256}\"  # macOS_x86_64/" Formula/jira-cli.rb
+}
+
 update_gitpod_cli(){
     # Get the manifest data
     manifest=$(curl -s https://releases.gitpod.io/cli/stable/manifest.json)
@@ -60,6 +77,9 @@ else
                 ;;
             "gitpod-cli")
                 update_gitpod_cli
+                ;;
+            "jira-cli")
+                update_jira_cli
                 ;;
             *)
                 echo "Unknown package: $package"
