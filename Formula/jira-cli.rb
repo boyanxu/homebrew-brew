@@ -14,7 +14,7 @@ class JiraCli < Formula
   end
 
   def install
-    bin.install "jiractl" => "jira"
+    bin.install "jira"
   end
 
   test do
