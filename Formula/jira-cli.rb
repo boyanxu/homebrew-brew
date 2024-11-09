@@ -14,13 +14,7 @@ class JiraCli < Formula
   end
 
   def install
-    bin.install "jira"
-    # Install bash completion
-    output = Utils.safe_popen_read("#{bin}/jira completion bash")
-    (bash_completion/"jira").write output
-    # Install zsh completion
-    output = Utils.safe_popen_read("#{bin}/jira completion zsh")
-    (zsh_completion/"_jira").write output
+    bin.install "jiractl" => "jira"
   end
 
   test do
