@@ -6,10 +6,10 @@ class JiraCli < Formula
   on_macos do
     if Hardware::CPU.arm?
       url "https://github.com/ankitpokhrel/jira-cli/releases/download/v#{version}/jira_#{version}_macOS_arm64.tar.gz"
-      sha256 "4a6a5a670bf8e81bf091b12e23f932f7133609bdf5c9f993c6c0a45df2510358"
+      sha256 "47654bd51faad87a7679a90f627824b95faa16b116dc2ea074cd4f1640bfdbbc"
     else
       url "https://github.com/ankitpokhrel/jira-cli/releases/download/v#{version}/jira_#{version}_macOS_x86_64.tar.gz"
-      sha256 "b8d4a9ff7b9d8117c4e6eba4f00df8506344431c784c3f83d486777c66593091"
+      sha256 "d1158338225b263c40fb4c60835e9241c135af1049e9dc35061f5a19db9c03f4"
     end
   end
 
