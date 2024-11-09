@@ -18,8 +18,6 @@ class JiraCli < Formula
     end
   
     def install
-      system "ls -la"
-      system "find", ".", "-type", "f"
       bin.install "bin/jira"
     end
   
