@@ -1,0 +1,72 @@
+{
+    "highlight.regex.regexes": [
+        {
+            "name": "TODO/CRITICAL",
+            "description": "Show todo and critical keyword on comment(s)",
+            "languageRegex": "\\b(c|cpp|go|java|javascript|php|rust|typescript)\\b",
+            "regexes": [
+                {
+                    "regex": [
+                        "(?:[\"][^]*?(?:(?<!\\\\)[\"]))",
+                        "|",
+                        "(",
+                        "(?:/\\*[^]*?\\*/)",
+                        "|",
+                        "(?://[^]*?(?:(?<!\\\\)$))",
+                        ")"
+                    ],
+                    "regexFlag": "gm",
+                    "regexLimit": 25000,
+                    "regexes": [
+                        {
+                            "index": 1,
+                            "regex": [
+                                "\\b(?<todo>TODO)\\b",
+                                "|",
+                                "\\b(CRITICAL)\\b"
+                            ],
+                            "regexFlag": "gmi",
+                            "regexLimit": 25000,
+                            "decorations": [
+                                {
+                                    "index": "todo",
+                                    "borderRadius": "4px",
+                                    "fontWeight": "bold",
+                                    "overviewRulerColor": "#FF9900FF",
+                                    "overviewRulerLane": 4,
+                                    "light": {
+                                        "color": "#000000",
+                                        "backgroundColor": "#FF990050",
+                                        "border": "1px solid #FF990090"
+                                    },
+                                    "dark": {
+                                        "color": "#FFFFFF",
+                                        "backgroundColor": "#FF990090",
+                                        "border": "1px solid #FF990050"
+                                    }
+                                },
+                                {
+                                    "index": 2,
+                                    "borderRadius": "4px",
+                                    "fontWeight": "bold",
+                                    "overviewRulerColor": "#FF0000FF",
+                                    "overviewRulerLane": 4,
+                                    "light": {
+                                        "color": "#000000",
+                                        "backgroundColor": "#FF000050",
+                                        "border": "1px solid #FF000090"
+                                    },
+                                    "dark": {
+                                        "color": "#FFFFFF",
+                                        "backgroundColor": "#FF000090",
+                                        "border": "1px solid #FF000050"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
