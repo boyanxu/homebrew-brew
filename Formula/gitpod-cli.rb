@@ -1,15 +1,15 @@
 class GitpodCli < Formula
   desc "Command-line interface for Gitpod"
   homepage "https://www.gitpod.io"
-  version "20250314.856"
+  version "20250415.631"
   
   on_macos do
     if Hardware::CPU.arm?
       url "https://releases.gitpod.io/cli/releases/#{version}/gitpod-darwin-arm64"
-      sha256 "6502e028973284ffdda38bc3aea6a9402291c3d62f0114b9589398f284f63f63" # darwin-arm64
+      sha256 "91f307568269dcae1c31e4590f965b0183eac90758a22d4949203f60d1d39537" # darwin-arm64
     else
       url "https://releases.gitpod.io/cli/releases/#{version}/gitpod-darwin-amd64"
-      sha256 "4c8f624fcacf3d3af2f70745327298c4a2424dfb917f280cf46be516b0cc763d" # darwin-amd64
+      sha256 "37c47290fe8086c30de1baf9a42e8633ff3307e491fc99e13d8d2dba22c78f14" # darwin-amd64
     end
   end
   
