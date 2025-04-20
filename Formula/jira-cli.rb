@@ -1,7 +1,7 @@
 class JiraCli < Formula
     desc "Feature-rich Interactive Jira Command Line"
     homepage "https://github.com/ankitpokhrel/jira-cli"
-    version "1.5.2"
+    version "1.6.0"
   
     on_macos do
         if Hardware::CPU.arm?
